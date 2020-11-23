@@ -2,19 +2,14 @@ package com.company;
 
 public class Circle {
 
-    private Vec2 position;
-    private int radius;
+    protected Vec2 position;
+    protected int radius;
+    protected Vec2 velocity;
 
-    public Circle(Vec2 position, int radius) {
+    public Circle(Vec2 position, int radius, Vec2 velocity) {
         this.position = position;
         this.radius = radius;
-    }
-
-    public static  boolean isIntersect(Circle a, Circle b){
-        int radius = a.radius + b.radius;
-        radius *= radius;
-        return radius > (a.position.getX() - b.position.getX())*(a.position.getX() - b.position.getX()) +
-                        (a.position.getY() - b.position.getY())*(a.position.getY() - b.position.getY());
+        this.velocity = velocity;
     }
 
     @Override

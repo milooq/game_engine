@@ -22,23 +22,28 @@ public class Panel extends Rectangle {
     }
 
     public void checkRightCollision(Ball b){
-        int ypos = b.position.getY() + b.getRadius();
-        int xpos = b.position.getX() + b.getRadius();
+        int ypos = b.position.getY();
+        int xpos = b.position.getX() + b.getRadius()/2;
         if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
             if(xpos >= position.getX()){
                 b.invXVel();
                 b.invYVel();
+                b.jump(position.getX() - xpos);
+                b.addVelocity(this.velocity);
             }
         }
     }
 
     public void checkLeftCollision(Ball b){
-        int yCenterPos = b.position.getY() + b.getRadius();
-        int xCenterPos = b.position.getX() + b.getRadius();
-        if( yCenterPos >= position.getY() && yCenterPos <= (position.getY() + height) ){
-            if(xCenterPos <= position.getX() + width){
+        int ypos = b.position.getY();
+        int xpos = b.position.getX() - b.getRadius()/2;
+
+        if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
+            if(xpos <= position.getX() + width){
                 b.invXVel();
                 b.invYVel();
+                b.jump((position.getX() + width) - xpos);
+                b.addVelocity(this.velocity);
             }
         }
     }

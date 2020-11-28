@@ -16,7 +16,7 @@ public class Window extends JFrame {
     public Window() {
 
         this.setVisible(true);
-        this.setTitle("Polynomial Graphics");
+        this.setTitle("Game");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBounds(0, 0, width, height);
@@ -33,27 +33,27 @@ public class Window extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP){
-                    a.moveLUp();
+                    a.moveRUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.moveLDown();
+                    a.moveRDown();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_W){
-                    a.moveRUp();
+                    a.moveLUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_S){
-                    a.moveRDown();
+                    a.moveLDown();
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.stopL();
+                    a.stopR();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
-                    a.stopR();
+                    a.stopL();
                 }
             }
         });

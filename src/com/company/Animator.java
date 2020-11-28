@@ -19,8 +19,9 @@ public class Animator extends Thread{
     Graphics frameGraphics;
     Ball b;
     Panel p1, p2;
+    int scoreP1 = 0, scoreP2 = 0;
 
-     private int panelSpeed = 2;
+    private int panelSpeed = 5;
 
     public static int cX = Window.width/2;
     public static int cY = Window.height/2;
@@ -31,9 +32,9 @@ public class Animator extends Thread{
         frameGraphics = frame.getGraphics();
         int x = ThreadLocalRandom.current().nextInt(3, 7 + 1);
         int y = ThreadLocalRandom.current().nextInt(3, 7 + 1);
-        b = new Ball(new Vec2(0, 0), 40, new Vec2(x,y));
-        p1 = new Panel(20, 100, new Vec2(-cX + 20, 50), new Vec2(0, 0));
-        p2 = new Panel(20, 100, new Vec2(cX - 40, 50), new Vec2(0, 0));
+        b = new Ball(new Vec2(0, 0), 40, new Vec2(5, 0));
+        p1 = new Panel(10, 100, new Vec2(-cX + 20, 50), new Vec2(0, 0));
+        p2 = new Panel(10, 100, new Vec2(cX - 40, 50), new Vec2(0, 0));
     }
 
     public void clear(){
@@ -66,6 +67,7 @@ public class Animator extends Thread{
             }
             clear();
             CheckCollisions();
+            updateScore();
             b.update();
             p1.update();
             p2.update();
@@ -74,6 +76,29 @@ public class Animator extends Thread{
             p2.draw(frameGraphics);
             g.drawImage(frame,0,0, Window.width, Window.height,null);
         }
+    }
+
+    private void updateScore(){
+            Ball.eOutOfBounce res = b.OutOfBonce();
+            switch (res) {
+                case RIGHT:
+                    scoreP1+=1;
+                    this.b = new Ball(new Vec2(0, 0), 40, new Vec2(5, 0));
+                    displayScore();
+                    break;
+                case LEFT:
+                    scoreP2+=1;
+                    this.b = new Ball(new Vec2(0, 0), 40, new Vec2(5, 0));
+                    displayScore();
+                    break;
+                default:
+                    //pass
+                    break;
+            }
+    }
+
+    public void displayScore(){
+        System.out.println("P1 " + scoreP1 + ":" + scoreP2 + "P2"  );
     }
 
     private void CheckCollisions(){

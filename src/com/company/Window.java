@@ -22,7 +22,6 @@ public class Window extends JFrame {
         this.setBounds(0, 0, width, height);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
-//      add panel to main frame
 
         this.addKeyListener(new KeyListener() {
             @Override

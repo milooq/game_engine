@@ -28,7 +28,15 @@ public class Panel extends Rectangle {
     }
 
     public void update(){
-        position.add(velocity);
+        boolean move_down = (velocity.getY() > 0);
+
+        if( position.getY() > (40 + 30) && !move_down){
+            position.add(velocity);
+        }
+
+        if(position.getY() < (Window.height - 40 - 15 - height) && move_down){
+            position.add(velocity);
+        }
     }
 
     public void checkRightCollision(Ball b){
@@ -40,6 +48,8 @@ public class Panel extends Rectangle {
                 b.invYVel();
                 b.jump(position.getX() - xpos);
                 b.addVelocity(this.velocity);
+                //эксперимент
+                b.addVelocity(new Vec2(1, 0));
             }
         }
     }
@@ -54,6 +64,8 @@ public class Panel extends Rectangle {
                 b.invYVel();
                 b.jump((position.getX() + width) - xpos);
                 b.addVelocity(this.velocity);
+                //эксперимент
+                b.addVelocity(new Vec2(1, 0));
             }
         }
     }

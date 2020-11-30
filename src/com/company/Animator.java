@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,8 +19,8 @@ public class Animator extends Thread{
 
         //Создаем игровые объекты
         b = new Ball(new Vec2(0, 0), 40, Vec2.mul(randomVec(3, 7),randomDirection()));
-        leftPanel = new Panel(panelWidth, 100, new Vec2(-cX + 20, 50), new Vec2(0, 0));
-        rightPanel = new Panel(panelWidth, 100, new Vec2(cX - 40, 50), new Vec2(0, 0));
+        leftPanel = new Panel(panelWidth, panelheight, new Vec2(-cX + 20, 50), new Vec2(0, 0));
+        rightPanel = new Panel(panelWidth, panelheight, new Vec2(cX - 40, 50), new Vec2(0, 0));
 }
 
     public void clear(){
@@ -74,24 +75,33 @@ public class Animator extends Thread{
         //float frameStart = GetCurrentTime( )
         double frameStarts = System.currentTimeMillis() / 1000.;
 
+        boolean winnerLeft = scoreLeft == 10;
+        boolean winnerRight = scoreRight == 10;
+
         // основной цикл
         while (true) {
-            final double currentTime = System.currentTimeMillis() / 1000.;
+//            final double currentTime = System.currentTimeMillis() / 1000.;
 
             // Сохраняется время, прошедшее с начала последнего кадра
-            accumulator += currentTime - frameStarts;
+//            accumulator += currentTime - frameStarts;
 
             // Записывается начало этого кадра
-            frameStarts = currentTime;
+//            frameStarts = currentTime;
 
-            while (accumulator > dt) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+//            while (accumulator > dt) {
                 //UpdatePhysics
                 CheckCollisions();
                 b.update();
                 leftPanel.update();
                 rightPanel.update();
                 accumulator -= dt;
-            }
+//            }
 
             //RenderGame
             clear();
@@ -101,7 +111,15 @@ public class Animator extends Thread{
             leftPanel.draw(frameGraphics);
             rightPanel.draw(frameGraphics);
             g.drawImage(frame,0,0, Window.width, Window.height,null);
+            {
+                winnerLeft = scoreLeft == 10;
+                winnerRight = scoreRight == 10;
+                if(winnerLeft || winnerRight){
+                    break;
+                }
+            }
         }
+        JOptionPane.showMessageDialog(null, "Победил " + ((winnerLeft) ? "левый" : "правый") + " игрок");
     }
 
     private void updateScore(){
@@ -178,7 +196,8 @@ public class Animator extends Thread{
     private int scoreLeft = 0, scoreRight = 0;
 
     private final int panelSpeed = 5;
-    private final int panelWidth = 25;
+    private final int panelWidth = 20;
+    private final int panelheight = 80;
 
     public static final int cX = Window.width/2;
     public static final int cY = Window.height/2;

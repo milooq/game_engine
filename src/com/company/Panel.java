@@ -1,16 +1,26 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Panel extends Rectangle {
 
 
     public Panel(int width, int height, Vec2 position, Vec2 velocity) {
         super(width, height, Animator.CoordNormalToBad(position),Animator.VelocityConvert(velocity));
+        try {
+            panel_image = ImageIO.read(new File("panel.png"));
+        }catch(IOException e) {
+            System.out.println("Пикчу панели не нашел(");
+        }
     }
 
     public void draw(Graphics g){
-        g.drawRect(position.getX(), position.getY(), width, height);
+        g.drawImage(panel_image, position.getX(), position.getY(), width, height, null);
+//        g.drawRect(position.getX(), position.getY(), width, height);
     }
 
     void setVelocity(Vec2 v){
@@ -47,4 +57,6 @@ public class Panel extends Rectangle {
             }
         }
     }
+
+    private BufferedImage panel_image;
 }

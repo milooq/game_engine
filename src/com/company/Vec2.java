@@ -37,6 +37,16 @@ public class Vec2 {
         return new Vec2(x, y) ;
     }
 
+    public void mul(int alpha){
+        x*=alpha;
+        y*=alpha;
+    }
+
+    public static Vec2 mul(Vec2 v, int alpha){
+        v.mul(alpha);
+        return v;
+    }
+
     @Override
     public String toString(){
         return "(" + x +", "+y+")";

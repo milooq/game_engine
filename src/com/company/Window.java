@@ -33,27 +33,27 @@ public class Window extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP){
-                    a.moveRUp();
+                    a.moveRightPanelUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.moveRDown();
+                    a.moveRightPanelDown();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_W){
-                    a.moveLUp();
+                    a.moveLeftPanelUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_S){
-                    a.moveLDown();
+                    a.moveLeftPanelDown();
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.stopR();
+                    a.stopRightPanel();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
-                    a.stopL();
+                    a.stopLeftPanel();
                 }
             }
         });

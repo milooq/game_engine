@@ -9,10 +9,10 @@ public class Ball extends Circle {
 
     public void draw(Graphics g){
         g.drawOval(position.getX() - radius/2, position.getY() - radius/2, radius, radius);
-        g.setColor(Color.RED);
-        g.drawOval(position.getX(), position.getY(), 1, 1);
-        g.drawOval(position.getX() - getRadius()/2, position.getY(), 2 , 2);
-        g.setColor(Color.BLACK);
+//        g.setColor(Color.RED);
+//        g.drawOval(position.getX(), position.getY(), 1, 1);
+//        g.drawOval(position.getX() - getRadius()/2, position.getY(), 2 , 2);
+//        g.setColor(Color.BLACK);
     }
 
     void addVelocity(Vec2 v){

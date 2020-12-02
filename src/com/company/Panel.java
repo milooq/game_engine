@@ -3,6 +3,7 @@ package com.company;
 import com.company.drawing.Drawable;
 import com.company.physics.Body;
 import com.company.physics.CircleBody;
+import com.company.physics.Engine;
 import com.company.physics.RectangleBody;
 
 import javax.imageio.ImageIO;
@@ -16,23 +17,22 @@ public class Panel extends RectangleBody implements Drawable {
 
     public Panel(int width, int height, Vec2 position, Vec2 velocity) {
         super(width,height);
-        this.position = Animator.CoordNormalToBad(position);
-        this.velocity = Animator.VelocityConvert(velocity);
+        this.position = Engine.CoordNormalToBad(position);
+        this.velocity = Engine.VelocityConvert(velocity);
         try {
             panel_image = ImageIO.read(new File("panel.png"));
         }catch(IOException e) {
-            System.out.println("Пикчу панели не нашел(");
+            System.out.println("Не найдена картина панельки!");
         }
     }
 
     @Override
     public void draw(Graphics g) {
         g.drawImage(panel_image, position.getX(), position.getY(), width, height, null);
-//        g.drawRect(position.getX(), position.getY(), width, height);
     }
 
     void setVelocity(Vec2 v){
-        this.velocity = Animator.VelocityConvert(v);
+        this.velocity = Engine.VelocityConvert(v);
     }
 
     @Override

@@ -2,6 +2,10 @@ package com.company;
 
 public class Main {
     public static void main(String[] args) {
-        new Window();
+        try{
+            new Window().play();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Vec2 {
 
     private int x;
@@ -45,6 +47,15 @@ public class Vec2 {
     public static Vec2 mul(Vec2 v, int alpha){
         v.mul(alpha);
         return v;
+    }
+    static public int randomDirection(){
+        int _v = ThreadLocalRandom.current().nextInt(0, 1 + 1);
+        return (_v == 0) ? 1 : -1;
+    }
+    static public Vec2 randomVec(int min, int max){
+        int x = ThreadLocalRandom.current().nextInt(min, max + 1);
+        int y = ThreadLocalRandom.current().nextInt(min, max + 1);
+        return new Vec2(x,y);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.company;
 
+import com.company.drawing.Animator;
+import com.company.physics.Engine;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,7 +13,8 @@ public class Window extends JFrame {
     public static int width = 1000;
     public static int height = 530;
 
-    Animator a;
+    public static final int cX = width/2;
+    public static final int cY = height/2;
 
     public Window() {
 
@@ -32,42 +35,106 @@ public class Window extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP){
-                    a.moveRightPanelUp();
+                    moveRightPanelUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.moveRightPanelDown();
+                    moveRightPanelDown();
                 }
 
                 if(e.getKeyCode() == KeyEvent.VK_W){
-                    a.moveLeftPanelUp();
+                    moveLeftPanelUp();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_S){
-                    a.moveLeftPanelDown();
+                    moveLeftPanelDown();
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN){
-                    a.stopRightPanel();
+                    stopRightPanel();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
-                    a.stopLeftPanel();
+                    stopLeftPanel();
                 }
             }
         });
 
-        Graphics g = this.getGraphics();
-        try {
-            a = new Animator(g);
-        } catch (NullPointerException e) {
-            System.out.println("Шарик, ты балбес");
-        }
-        a.start();
+        //Создаем игровые объекты
+        ball = new Ball(new Vec2(0, 0), 40, Vec2.mul(Vec2.randomVec(3, 7),Vec2.randomDirection()));
+        leftPanel = new Panel(panelWidth, panelHeight, new Vec2(-cX + 20, 50), new Vec2(0, 0));
+        rightPanel = new Panel(panelWidth, panelHeight, new Vec2(cX - 40, 50), new Vec2(0, 0));
+
+        //Настройка физики
+        this.e = new Engine(leftPanel, rightPanel, ball);
+        //Настройка отрисовки
+        this.a = new Animator(this.getGraphics());
+        this.a.addDrawable(ball); this.a.addDrawable(leftPanel); this.a.addDrawable(rightPanel);
     }
 
-        @Override
-        public void paint (Graphics g){
-            super.paint(g);
+    public void play() throws InterruptedException {
+        while (true){
+            Thread.sleep(10);
+            updateScore();
+            if(checkWinner()){
+                break;
+            }
+
+            e.update();
+            a.draw();
         }
+    }
+
+    private void updateScore(){
+        Ball.pp res = ball.playerPoint();
+        if(res != Ball.pp.NONE){
+            Window.score[res.ordinal()] += 1;
+            e.setNewBall();
+        }
+    }
+
+    private void moveLeftPanelUp(){
+        leftPanel.setVelocity(new Vec2(0, panelSpeed));
+    }
+    private void moveLeftPanelDown(){
+        leftPanel.setVelocity(new Vec2(0, -panelSpeed));
+    }
+    private void stopLeftPanel(){
+        leftPanel.setVelocity(new Vec2(0,0));
+    }
+
+    private void moveRightPanelUp(){
+        rightPanel.setVelocity(new Vec2(0, panelSpeed));
+    }
+    private void moveRightPanelDown(){
+        rightPanel.setVelocity(new Vec2(0, -panelSpeed));
+    }
+    private void stopRightPanel(){
+        rightPanel.setVelocity(new Vec2(0,0));
+    }
+
+    private boolean checkWinner() {
+        boolean winnerLeft = Window.score[Ball.pp.LEFT.ordinal()] == 10;
+        boolean winnerRight = Window.score[Ball.pp.RIGHT.ordinal()] == 10;
+        if(winnerLeft || winnerRight){
+            JOptionPane.showMessageDialog(null, "Победил " + ((winnerLeft) ? "левый" : "правый") + " игрок");
+            return true;
+        }
+        return false;
+    }
+
+    static public int[] score = {0, 0};
+
+    //View
+    Animator a;
+    //Model
+    Engine e;
+
+    //Objects
+    Ball ball;
+
+    Panel leftPanel, rightPanel;
+    private final int panelSpeed = 5;
+    private static final int panelWidth = 20;
+    private static final int panelHeight = 80;
 }

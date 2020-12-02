@@ -2,7 +2,11 @@ package com.company.physics;
 
 import com.company.Ball;
 import com.company.Panel;
+import com.company.Vec2;
 import com.company.Window;
+
+import static com.company.Window.cX;
+import static com.company.Window.cY;
 
 public class Engine {
 
@@ -20,8 +24,10 @@ public class Engine {
         ball.update();
     }
 
-    public void setNewBall(Ball ball){
-        this.ball = ball;
+    public void setNewBall(){
+        this.ball.position.setX(Window.cX);
+        this.ball.position.setY(Window.cY);
+        this.ball.velocity = Vec2.mul(Vec2.randomVec(3, 7),Vec2.randomDirection());
     }
 
     private void CheckCollisions(){
@@ -65,6 +71,19 @@ public class Engine {
         }
     }
 
+    /*
+    Переводит
+    (Начало в ценре окна, ось X вправо, ось Y вверх) ->
+    (Начало в левом верхнем углу окна, ось X вправо, ось Y вниз)
+     */
+    static public Vec2 CoordNormalToBad(Vec2 v){
+        return new Vec2(v.getX() + cX, -v.getY() + cY);
+    }
+    //См. выше
+    static public Vec2 VelocityConvert(Vec2 v){
+        return new Vec2(v.getX(), -v.getY());
+    }
+
     private final Panel leftPanel, rightPanel;
-    private Ball ball;
+    private final Ball ball;
 }

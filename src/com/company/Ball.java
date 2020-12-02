@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.drawing.Drawable;
 import com.company.physics.CircleBody;
+import com.company.physics.Engine;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,8 +14,8 @@ public class Ball extends CircleBody implements Drawable {
 
     public Ball(Vec2 position, int diameter, Vec2 velocity) {
         super(diameter);
-        this.position =  Animator.CoordNormalToBad(position);
-        this.velocity =  Animator.VelocityConvert(velocity);
+        this.position =  Engine.CoordNormalToBad(position);
+        this.velocity =  Engine.VelocityConvert(velocity);
         try {
             ball_image = ImageIO.read(new File("ball.png"));
         }catch(IOException e) {
@@ -25,7 +26,6 @@ public class Ball extends CircleBody implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.drawImage(ball_image, position.getX() - radius/2, position.getY() - radius/2, radius, radius, null);
-//        g.drawOval(position.getX() - radius/2, position.getY() - radius/2, radius, radius);
     }
 
     @Override
@@ -36,8 +36,6 @@ public class Ball extends CircleBody implements Drawable {
     public void addVelocity(Vec2 v){
         this.velocity.add(v);
     }
-
-    void mulVelocity(int alpha){this.velocity.mul(alpha);}
 
     public int getRadius(){
         return radius;

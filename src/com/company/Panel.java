@@ -1,6 +1,8 @@
 package com.company;
 
 import com.company.drawing.Drawable;
+import com.company.physics.Body;
+import com.company.physics.CircleBody;
 import com.company.physics.RectangleBody;
 
 import javax.imageio.ImageIO;
@@ -45,37 +47,5 @@ public class Panel extends RectangleBody implements Drawable {
             position.add(velocity);
         }
     }
-
-    public void checkRightCollision(Ball b){
-        int ypos = b.getPosition().getY();
-        int xpos = b.getPosition().getX() + b.getRadius()/2;
-        if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
-            if(xpos >= position.getX()){
-                b.invXVel();
-                b.invYVel();
-                b.jump(position.getX() - xpos);
-                b.addVelocity(this.velocity);
-                //эксперимент
-                b.addVelocity(new Vec2(1, 0));
-            }
-        }
-    }
-
-    public void checkLeftCollision(Ball b){
-        int ypos = b.getPosition().getY();
-        int xpos = b.getPosition().getX() - b.getRadius()/2;
-
-        if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
-            if(xpos <= position.getX() + width){
-                b.invXVel();
-                b.invYVel();
-                b.jump((position.getX() + width) - xpos);
-                b.addVelocity(this.velocity);
-                //эксперимент
-                b.addVelocity(new Vec2(1, 0));
-            }
-        }
-    }
-
     private BufferedImage panel_image;
 }

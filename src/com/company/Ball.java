@@ -33,7 +33,7 @@ public class Ball extends CircleBody implements Drawable {
         position.add(velocity);
     }
 
-    void addVelocity(Vec2 v){
+    public void addVelocity(Vec2 v){
         this.velocity.add(v);
     }
 
@@ -41,10 +41,6 @@ public class Ball extends CircleBody implements Drawable {
 
     public int getRadius(){
         return radius;
-    }
-
-    public Vec2 getPosition(){
-        return position;
     }
 
     public void invXVel(){
@@ -55,30 +51,23 @@ public class Ball extends CircleBody implements Drawable {
         velocity.setY(-velocity.getY());
     }
 
+    public void invVel(){
+        invXVel();
+        invYVel();
+    }
+
     public void jump(int jmp) { position.setX(position.getX() + jmp);}
 
-    public void checkTopCollision() {
-        if(position.getY() - radius/2 <= 30){
-            invYVel();
-        }
-    }
+    public enum pp {LEFT, RIGHT, NONE};
 
-    public void checkBottomCollision() {
-        if(position.getY() + radius/2 >= Window.height){
-            invYVel();
-        }
-    }
-
-    public enum eOutOfBounce {NONE, LEFT, RIGHT};
-
-    public Ball.eOutOfBounce OutOfBonce(){
+    public pp playerPoint(){
         if((position.getX() + radius/2 > Window.width)){
-            return Ball.eOutOfBounce.RIGHT;
+            return pp.LEFT;
         }
         if((position.getX() - radius/2 < 0)){
-            return  Ball.eOutOfBounce.LEFT;
+            return  pp.RIGHT;
         }
-        return Ball.eOutOfBounce.NONE;
+        return pp.NONE;
     }
 
     private BufferedImage ball_image;

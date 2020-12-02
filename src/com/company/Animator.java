@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.physics.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Animator extends Thread{
 
     public Animator(Graphics g) {
+
         //Настройки графики
         this.g = g;
         frame = new BufferedImage(Window.width,Window.height,BufferedImage.TYPE_INT_RGB);
@@ -18,6 +21,9 @@ public class Animator extends Thread{
         b = new Ball(new Vec2(0, 0), 40, Vec2.mul(randomVec(3, 7),randomDirection()));
         leftPanel = new Panel(panelWidth, panelheight, new Vec2(-cX + 20, 50), new Vec2(0, 0));
         rightPanel = new Panel(panelWidth, panelheight, new Vec2(cX - 40, 50), new Vec2(0, 0));
+
+        //Настройка физики
+        this.e = new Engine(leftPanel, rightPanel, b);
 }
 
     public void clear(){
@@ -72,8 +78,8 @@ public class Animator extends Thread{
         //float frameStart = GetCurrentTime( )
         double frameStarts = System.currentTimeMillis() / 1000.;
 
-        boolean winnerLeft = scoreLeft == 10;
-        boolean winnerRight = scoreRight == 10;
+        boolean winnerLeft = false;
+        boolean winnerRight = false;
 
         // основной цикл
         while (true) {
@@ -93,11 +99,12 @@ public class Animator extends Thread{
 
 //            while (accumulator > dt) {
                 //UpdatePhysics
-                CheckCollisions();
-                b.update();
-                leftPanel.update();
-                rightPanel.update();
-                accumulator -= dt;
+//                CheckCollisions();
+//                b.update();
+//                leftPanel.update();
+//                rightPanel.update();
+//                accumulator -= dt;
+            e.update();
 //            }
 
             //RenderGame
@@ -109,8 +116,8 @@ public class Animator extends Thread{
             rightPanel.draw(frameGraphics);
             g.drawImage(frame,0,0, Window.width, Window.height,null);
             {
-                winnerLeft = scoreLeft == 10;
-                winnerRight = scoreRight == 10;
+                winnerLeft = score[Ball.pp.LEFT.ordinal()] == 10;
+                winnerRight = score[Ball.pp.RIGHT.ordinal()] == 10;
                 if(winnerLeft || winnerRight){
                     break;
                 }
@@ -120,19 +127,12 @@ public class Animator extends Thread{
     }
 
     private void updateScore(){
-            Ball.eOutOfBounce res = b.OutOfBonce();
-            switch (res) {
-                case RIGHT:
-                    scoreLeft +=1;
-                    this.b = new Ball(new Vec2(0, 0), 40, Vec2.mul(randomVec(3, 7),randomDirection()));
-                    break;
-                case LEFT:
-                    scoreRight +=1;
-                    this.b = new Ball(new Vec2(0, 0), 40, Vec2.mul(randomVec(3, 7),randomDirection()));
-                    break;
-                default:
-                    //pass
-                    break;
+            Ball.pp res = b.playerPoint();
+            if(res != Ball.pp.NONE){
+                score[res.ordinal()] += 1;
+                this.b = new Ball(new Vec2(0, 0), 40,
+                        Vec2.mul(randomVec(3, 7),randomDirection()));
+                e.setNewBall(this.b);
             }
             displayScore();
     }
@@ -154,16 +154,16 @@ public class Animator extends Thread{
 
     public void displayScore(){
         int size = 50;
-        frameGraphics.drawString("" + scoreLeft, cX - size-28, 100);
-        frameGraphics.drawString("" + scoreRight, cX + size, 100);
+        frameGraphics.drawString("" + score[Ball.pp.LEFT.ordinal()], cX - size-28, 100);
+        frameGraphics.drawString("" + score[Ball.pp.RIGHT.ordinal()], cX + size, 100);
     }
 
-    private void CheckCollisions(){
-        b.checkTopCollision();
-        b.checkBottomCollision();
-        rightPanel.checkRightCollision(b);
-        leftPanel.checkLeftCollision(b);
-    }
+//    private void CheckCollisions(){
+//        b.checkTopCollision();
+//        b.checkBottomCollision();
+//        rightPanel.checkRightCollision(b);
+//        leftPanel.checkLeftCollision(b);
+//    }
 
     public void moveLeftPanelUp(){
         leftPanel.setVelocity(new Vec2(0, panelSpeed));
@@ -190,7 +190,10 @@ public class Animator extends Thread{
     private final Graphics frameGraphics;
     private Ball b;
     private final Panel leftPanel, rightPanel;
-    private int scoreLeft = 0, scoreRight = 0;
+
+    private int[] score = {0, 0};
+
+    private Engine e;
 
     private final int panelSpeed = 5;
     private final int panelWidth = 20;

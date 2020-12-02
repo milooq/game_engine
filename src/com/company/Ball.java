@@ -1,24 +1,36 @@
 package com.company;
 
+import com.company.drawing.Drawable;
+import com.company.physics.CircleBody;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Ball extends Circle {
+public class Ball extends CircleBody implements Drawable {
+
     public Ball(Vec2 position, int diameter, Vec2 velocity) {
-        super(Animator.CoordNormalToBad(position), diameter, Animator.VelocityConvert(velocity));
+        super(diameter);
+        this.position =  Animator.CoordNormalToBad(position);
+        this.velocity =  Animator.VelocityConvert(velocity);
         try {
             ball_image = ImageIO.read(new File("ball.png"));
         }catch(IOException e) {
-            System.out.println("Пикчу шара не нашел(");
+            System.out.println("Не найдена картина мяча!");
         }
     }
 
-    public void draw(Graphics g){
+    @Override
+    public void draw(Graphics g) {
         g.drawImage(ball_image, position.getX() - radius/2, position.getY() - radius/2, radius, radius, null);
 //        g.drawOval(position.getX() - radius/2, position.getY() - radius/2, radius, radius);
+    }
+
+    @Override
+    public void update() {
+        position.add(velocity);
     }
 
     void addVelocity(Vec2 v){
@@ -27,12 +39,12 @@ public class Ball extends Circle {
 
     void mulVelocity(int alpha){this.velocity.mul(alpha);}
 
-    public void update(){
-        position.add(velocity);
+    public int getRadius(){
+        return radius;
     }
 
-    public int getRadius(){
-        return radius ;
+    public Vec2 getPosition(){
+        return position;
     }
 
     public void invXVel(){
@@ -59,14 +71,14 @@ public class Ball extends Circle {
 
     public enum eOutOfBounce {NONE, LEFT, RIGHT};
 
-    public eOutOfBounce OutOfBonce(){
+    public Ball.eOutOfBounce OutOfBonce(){
         if((position.getX() + radius/2 > Window.width)){
-            return eOutOfBounce.RIGHT;
+            return Ball.eOutOfBounce.RIGHT;
         }
         if((position.getX() - radius/2 < 0)){
-            return  eOutOfBounce.LEFT;
+            return  Ball.eOutOfBounce.LEFT;
         }
-        return eOutOfBounce.NONE;
+        return Ball.eOutOfBounce.NONE;
     }
 
     private BufferedImage ball_image;

@@ -1,16 +1,21 @@
 package com.company;
 
+import com.company.drawing.Drawable;
+import com.company.physics.RectangleBody;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Panel extends Rectangle {
+public class Panel extends RectangleBody implements Drawable {
 
 
     public Panel(int width, int height, Vec2 position, Vec2 velocity) {
-        super(width, height, Animator.CoordNormalToBad(position),Animator.VelocityConvert(velocity));
+        super(width,height);
+        this.position = Animator.CoordNormalToBad(position);
+        this.velocity = Animator.VelocityConvert(velocity);
         try {
             panel_image = ImageIO.read(new File("panel.png"));
         }catch(IOException e) {
@@ -18,7 +23,8 @@ public class Panel extends Rectangle {
         }
     }
 
-    public void draw(Graphics g){
+    @Override
+    public void draw(Graphics g) {
         g.drawImage(panel_image, position.getX(), position.getY(), width, height, null);
 //        g.drawRect(position.getX(), position.getY(), width, height);
     }
@@ -27,7 +33,8 @@ public class Panel extends Rectangle {
         this.velocity = Animator.VelocityConvert(v);
     }
 
-    public void update(){
+    @Override
+    public void update() {
         boolean move_down = (velocity.getY() > 0);
 
         if( position.getY() > (40 + 30) && !move_down){
@@ -40,8 +47,8 @@ public class Panel extends Rectangle {
     }
 
     public void checkRightCollision(Ball b){
-        int ypos = b.position.getY();
-        int xpos = b.position.getX() + b.getRadius()/2;
+        int ypos = b.getPosition().getY();
+        int xpos = b.getPosition().getX() + b.getRadius()/2;
         if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
             if(xpos >= position.getX()){
                 b.invXVel();
@@ -55,8 +62,8 @@ public class Panel extends Rectangle {
     }
 
     public void checkLeftCollision(Ball b){
-        int ypos = b.position.getY();
-        int xpos = b.position.getX() - b.getRadius()/2;
+        int ypos = b.getPosition().getY();
+        int xpos = b.getPosition().getX() - b.getRadius()/2;
 
         if( ypos >= position.getY() && ypos <= (position.getY() + height) ){
             if(xpos <= position.getX() + width){

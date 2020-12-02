@@ -1,0 +1,7 @@
+package com.company.drawing;
+
+import java.awt.*;
+
+public interface Drawable {
+    void draw(Graphics g);
+}

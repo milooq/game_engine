@@ -5,6 +5,8 @@ import com.company.Panel;
 import com.company.Vec2;
 import com.company.Window;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import static com.company.Window.cX;
 import static com.company.Window.cY;
 
@@ -39,9 +41,11 @@ public class Engine {
     private void checkBallEdgeCollision(){
         if(ball.position.getY() - ball.radius/2 <= 30){
             ball.invYVel();
+            ball.addVelocity(collisionNoise(ball.velocity));
         }
         if(ball.position.getY() + ball.radius/2 >= Window.height){
             ball.invYVel();
+            ball.addVelocity(collisionNoise(ball.velocity));
         }
     }
 
@@ -54,6 +58,7 @@ public class Engine {
                 ball.invVel();
                 ball.jump(rightPanel.position.getX() - xpos);
                 ball.addVelocity(rightPanel.velocity);
+                ball.addVelocity(collisionNoise(ball.velocity));
             }
         }
     }
@@ -67,8 +72,16 @@ public class Engine {
                 ball.invVel();
                 ball.jump((leftPanel.position.getX() + leftPanel.width) - xpos);
                 ball.addVelocity(leftPanel.velocity);
+                ball.addVelocity(collisionNoise(ball.velocity));
             }
         }
+    }
+
+    private Vec2 collisionNoise(Vec2 velocity){
+        Vec2 noise = Vec2.rot90deg(velocity);
+        noise.normalize();
+        noise.mul(ThreadLocalRandom.current().nextInt(-1, 1 + 1));
+        return noise;
     }
 
     /*

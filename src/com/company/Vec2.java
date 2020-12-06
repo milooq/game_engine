@@ -44,6 +44,16 @@ public class Vec2 {
         y*=alpha;
     }
 
+    public final int len(){
+        return (int)Math.sqrt(x*x + y*y);
+    }
+
+    public void normalize(){
+        double inv = 1.0/len();
+        this.x = (int)(x * inv);
+        this.y = (int)(y * inv);
+    }
+
     public static Vec2 mul(Vec2 v, int alpha){
         v.mul(alpha);
         return v;
@@ -56,6 +66,10 @@ public class Vec2 {
         int x = ThreadLocalRandom.current().nextInt(min, max + 1);
         int y = ThreadLocalRandom.current().nextInt(min, max + 1);
         return new Vec2(x,y);
+    }
+
+    static public Vec2 rot90deg(Vec2 v){
+        return new Vec2(-v.getY(),v.getX());
     }
 
     @Override

@@ -1,0 +1,69 @@
+@startuml
+package "physics" {
+
+abstract class Body {
+  + void update()
+  Vec2 position
+  Vec2 velocity
+}
+
+abstract class CircleBody {
+  int radius
+}
+
+abstract class RectangleBody{
+  int width
+  int height
+}
+
+class engine{
+  + void update()
+    Panel leftPanel, rightPanel;
+    Ball ball;
+}
+
+  Body <-- RectangleBody
+  Body <-- CircleBody
+}
+
+class Ball{
+  BufferedImage ball_image
+  enum pp
+}
+
+class Panel{
+  BufferedImage panel_image
+}
+
+CircleBody <-- Ball
+Drawable<-- Ball
+RectangleBody <--Panel
+Drawable<--Panel
+
+package "drawing" {
+
+interface Drawable{
+  +void draw(Graphics)
+}
+
+class Animator{
+  +void draw()
+  +void addDrawable(Drawable)
+
+  Graphics g;
+  BufferedImage frame;
+  Graphics frameGraphics;
+  ArrayList<Drawable> drawables;
+}
+
+}
+
+class Window{
+  + void paint(Graphics)
+  + void play()
+  static int width
+  static int height
+}
+
+JFrame <-- Window
+@enduml

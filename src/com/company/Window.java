@@ -4,8 +4,12 @@ import com.company.drawing.Animator;
 import com.company.physics.Engine;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Window extends JFrame {
@@ -17,7 +21,6 @@ public class Window extends JFrame {
     public static final int cY = height/2;
 
     public Window() {
-
         this.setVisible(true);
         this.setTitle("Game");
         this.setResizable(false);
@@ -70,9 +73,37 @@ public class Window extends JFrame {
         //Настройка отрисовки
         this.a = new Animator(this.getGraphics());
         this.a.addDrawable(ball); this.a.addDrawable(leftPanel); this.a.addDrawable(rightPanel);
+        menu = new Menu(this.getContentPane());
+    }
+
+//  Может быть стоит поместить окно внутри меню?
+//  Так всё было бы намного проще
+    class Menu {
+        public Menu(Container c){
+            startLocalGameButton = new JButton("Играть на одном компьютере");
+            startLocalGameButton.setSize(width, height);
+            startLocalGameButton.setLocation(cX - width/2, 200 - height/2);
+            startLocalGameButton.setFocusable(false);
+            startLocalGameButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    startLocalGameButton.setVisible(false);
+                    startGame.set(true);
+                }
+            });
+            c.add(startLocalGameButton);
+            c.repaint();
+        }
+
+        private final JButton startLocalGameButton;
+        private static final int width = 150, height = 50;
     }
 
     public void play() throws InterruptedException {
+        while(!startGame.get()){
+//            Ждём пока не нажали кнопку играть
+        }
+        a.countDown(); // даем время приготовиться
         while (true){
             Thread.sleep(10);
             updateScore();
@@ -118,6 +149,7 @@ public class Window extends JFrame {
         boolean winnerRight = Window.score[Ball.pp.RIGHT.ordinal()] == 10;
         if(winnerLeft || winnerRight){
             JOptionPane.showMessageDialog(null, "Победил " + ((winnerLeft) ? "левый" : "правый") + " игрок");
+            score[0] = score[1] = 0;
             return true;
         }
         return false;
@@ -137,4 +169,8 @@ public class Window extends JFrame {
     private final int panelSpeed = 5;
     private static final int panelWidth = 20;
     private static final int panelHeight = 80;
+
+    Menu menu;
+    //Atomic чтобы обновлять и считывать переменную из разных потоков
+    AtomicBoolean startGame = new AtomicBoolean(false);
 }

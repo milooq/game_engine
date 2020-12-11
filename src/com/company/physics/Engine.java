@@ -32,6 +32,11 @@ public class Engine {
         this.ball.velocity = Vec2.mul(Vec2.randomVec(3, 7),Vec2.randomDirection());
     }
 
+    public void resetPanels(){
+        leftPanel.position = CoordNormalToBad(new Vec2(-cX + 20, 50));
+        rightPanel.position = CoordNormalToBad(new Vec2(cX - 40, 50));
+    }
+
     private void CheckCollisions(){
         checkBallEdgeCollision();
         checkRightPanelCollision();

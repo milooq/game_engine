@@ -129,6 +129,14 @@ public class Window extends JFrame {
         } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }
+        endGame();
+    }
+
+    private void endGame(){
+        e.resetPanels();
+        //reset score
+        score[0] = score[1] = 0;
+        menu.show();
     }
 
     private void updateScore(){
@@ -164,7 +172,6 @@ public class Window extends JFrame {
         boolean winnerRight = Window.score[Ball.pp.RIGHT.ordinal()] == 10;
         if(winnerLeft || winnerRight){
             JOptionPane.showMessageDialog(null, "Победил " + ((winnerLeft) ? "левый" : "правый") + " игрок");
-            score[0] = score[1] = 0;
             return true;
         }
         return false;

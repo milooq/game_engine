@@ -41,11 +41,11 @@ public class Engine {
     private void checkBallEdgeCollision(){
         if(ball.position.getY() - ball.radius/2 <= 30){
             ball.invYVel();
-            ball.addVelocity(collisionNoise(ball.velocity));
+//            ball.addVelocity(collisionNoise(ball.velocity));
         }
         if(ball.position.getY() + ball.radius/2 >= Window.height){
             ball.invYVel();
-            ball.addVelocity(collisionNoise(ball.velocity));
+//            ball.addVelocity(collisionNoise(ball.velocity));
         }
     }
 
@@ -58,7 +58,7 @@ public class Engine {
                 ball.invVel();
                 ball.jump(rightPanel.position.getX() - xpos);
                 ball.addVelocity(rightPanel.velocity);
-                ball.addVelocity(collisionNoise(ball.velocity));
+//                ball.addVelocity(collisionNoise(ball.velocity));
             }
         }
     }
@@ -72,7 +72,7 @@ public class Engine {
                 ball.invVel();
                 ball.jump((leftPanel.position.getX() + leftPanel.width) - xpos);
                 ball.addVelocity(leftPanel.velocity);
-                ball.addVelocity(collisionNoise(ball.velocity));
+//                ball.addVelocity(collisionNoise(ball.velocity));
             }
         }
     }

@@ -78,8 +78,9 @@ public class Window extends JFrame {
 
 //  Может быть стоит поместить окно внутри меню?
 //  Так всё было бы намного проще
-    class Menu {
-        public Menu(Container c){
+     public class Menu {
+        public Menu(Container C){
+            c = C;
             startLocalGameButton = new JButton("Играть на одном компьютере");
             startLocalGameButton.setSize(width, height);
             startLocalGameButton.setLocation(cX - width/2, 200 - height/2);
@@ -87,32 +88,46 @@ public class Window extends JFrame {
             startLocalGameButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    startLocalGameButton.setVisible(false);
-                    startGame.set(true);
+                    hide();
+                    new Thread(Window.this::play).start();
                 }
             });
             c.add(startLocalGameButton);
             c.repaint();
         }
 
+        public void show(){
+            startLocalGameButton.setVisible(true);
+            c.repaint();
+        }
+
+        public void hide(){
+            startLocalGameButton.setVisible(false);
+        }
+
         private final JButton startLocalGameButton;
         private static final int width = 150, height = 50;
+        Container c;
     }
 
-    public void play() throws InterruptedException {
-        while(!startGame.get()){
-//            Ждём пока не нажали кнопку играть
-        }
-        a.countDown(); // даем время приготовиться
-        while (true){
-            Thread.sleep(10);
-            updateScore();
-            if(checkWinner()){
-                break;
-            }
+    public void play() {
+        isPlaying = true;
+        try {
+            a.countDown(); // даем время приготовиться
+            
+            while (true){
+                Thread.sleep(10);
+                updateScore();
+                if(checkWinner()){
+                    isPlaying = false;
+                    break;
+                }
 
-            e.update();
-            a.draw();
+                e.update();
+                a.draw();
+            }
+        } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace();
         }
     }
 
@@ -170,7 +185,7 @@ public class Window extends JFrame {
     private static final int panelWidth = 20;
     private static final int panelHeight = 80;
 
+    static boolean isPlaying = false;
+
     Menu menu;
-    //Atomic чтобы обновлять и считывать переменную из разных потоков
-    AtomicBoolean startGame = new AtomicBoolean(false);
 }

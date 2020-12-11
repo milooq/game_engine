@@ -3,12 +3,16 @@ package com.company;
 import com.company.drawing.Animator;
 import com.company.physics.Engine;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -73,11 +77,12 @@ public class Window extends JFrame {
         //Настройка отрисовки
         this.a = new Animator(this.getGraphics());
         this.a.addDrawable(ball); this.a.addDrawable(leftPanel); this.a.addDrawable(rightPanel);
+        //Меню и темы
         menu = new Menu(this.getContentPane());
+        themeManager = new ThemeManager();
+        themeManager.updateTheme("Default");
     }
 
-//  Может быть стоит поместить окно внутри меню?
-//  Так всё было бы намного проще
      public class Menu {
         public Menu(Container C){
             c = C;
@@ -108,6 +113,38 @@ public class Window extends JFrame {
         private final JButton startLocalGameButton;
         private static final int width = 150, height = 50;
         Container c;
+    }
+
+    protected class ThemeManager{
+        public ThemeManager(){
+
+        }
+
+        public void updateTheme(String name){
+            Theme theme = new Theme(name);
+
+            leftPanel.setTheme(theme.panelTheme);
+            rightPanel.setTheme(theme.panelTheme);
+            ball.setTheme(theme.circleTheme);
+        }
+
+        public class Theme{
+            public Theme(String name){
+                try {
+                    panelTheme = ImageIO.read(new File(sourcesDirectory + name + "/panel.png"));
+                    circleTheme = ImageIO.read(new File(sourcesDirectory+ name + "/ball.png"));
+//                backgroundTheme = ImageIO.read(new File(name + "/panel.png"));
+//                buttonTheme = ImageIO.read(new File(name + "/panel.png"));
+                }catch(IOException e) {
+                    System.out.println("Ошибка загрузки темы!");
+                }
+            }
+            protected BufferedImage panelTheme;
+            protected BufferedImage circleTheme;
+            protected BufferedImage backgroundTheme;
+            protected BufferedImage buttonTheme;
+            private static final String sourcesDirectory = "Themes/";
+        }
     }
 
     public void play() {
@@ -195,4 +232,5 @@ public class Window extends JFrame {
     static boolean isPlaying = false;
 
     Menu menu;
+    ThemeManager themeManager;
 }

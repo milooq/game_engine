@@ -1,16 +1,11 @@
 package com.company;
 
 import com.company.drawing.Drawable;
-import com.company.physics.Body;
-import com.company.physics.CircleBody;
 import com.company.physics.Engine;
 import com.company.physics.RectangleBody;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Panel extends RectangleBody implements Drawable {
 
@@ -19,16 +14,19 @@ public class Panel extends RectangleBody implements Drawable {
         super(width,height);
         this.position = Engine.CoordNormalToBad(position);
         this.velocity = Engine.VelocityConvert(velocity);
-        try {
-            panel_image = ImageIO.read(new File("panel.png"));
-        }catch(IOException e) {
-            System.out.println("Не найдена картина панельки!");
-        }
+    }
+
+    public void setTheme(BufferedImage image){
+        panelImage = image;
     }
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(panel_image, position.getX(), position.getY(), width, height, null);
+        if(panelImage == null){
+            g.drawRect(position.getX(), position.getY(), width, height);
+            return;
+        }
+        g.drawImage(panelImage, position.getX(), position.getY(), width, height, null);
     }
 
     void setVelocity(Vec2 v){
@@ -47,5 +45,5 @@ public class Panel extends RectangleBody implements Drawable {
             position.add(velocity);
         }
     }
-    private BufferedImage panel_image;
+    private BufferedImage panelImage;
 }

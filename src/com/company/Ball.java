@@ -4,11 +4,8 @@ import com.company.drawing.Drawable;
 import com.company.physics.CircleBody;
 import com.company.physics.Engine;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Ball extends CircleBody implements Drawable {
 
@@ -16,16 +13,19 @@ public class Ball extends CircleBody implements Drawable {
         super(diameter);
         this.position =  Engine.CoordNormalToBad(position);
         this.velocity =  Engine.VelocityConvert(velocity);
-        try {
-            ball_image = ImageIO.read(new File("ball.png"));
-        }catch(IOException e) {
-            System.out.println("Не найдена картина мяча!");
-        }
+    }
+
+    public void setTheme(BufferedImage image){
+        ballImage = image;
     }
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(ball_image, position.getX() - radius/2, position.getY() - radius/2, radius, radius, null);
+        if(ballImage == null){
+            g.drawOval(position.getX() - radius/2, position.getY() - radius/2, radius, radius);
+            return;
+        }
+        g.drawImage(ballImage, position.getX() - radius/2, position.getY() - radius/2, radius, radius, null);
     }
 
     @Override
@@ -68,5 +68,5 @@ public class Ball extends CircleBody implements Drawable {
         return pp.NONE;
     }
 
-    private BufferedImage ball_image;
+    private BufferedImage ballImage;
 }

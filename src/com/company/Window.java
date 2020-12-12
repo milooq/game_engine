@@ -122,10 +122,12 @@ public class Window extends JFrame {
 
         public void updateTheme(String name){
             Theme theme = new Theme(name);
-
+            //текстуры
             leftPanel.setTheme(theme.panelTheme);
             rightPanel.setTheme(theme.panelTheme);
             ball.setTheme(theme.circleTheme);
+            //задний фон
+            a.setBackground(theme.backgroundTheme);
         }
 
         public class Theme{
@@ -133,7 +135,7 @@ public class Window extends JFrame {
                 try {
                     panelTheme = ImageIO.read(new File(sourcesDirectory + name + "/panel.png"));
                     circleTheme = ImageIO.read(new File(sourcesDirectory+ name + "/ball.png"));
-//                backgroundTheme = ImageIO.read(new File(name + "/panel.png"));
+                backgroundTheme = ImageIO.read(new File(sourcesDirectory + name + "/background.png"));
 //                buttonTheme = ImageIO.read(new File(name + "/panel.png"));
                 }catch(IOException e) {
                     System.out.println("Ошибка загрузки темы!");

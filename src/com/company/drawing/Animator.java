@@ -25,8 +25,12 @@ public class Animator{
     }
 
     private void clear(){
-        frameGraphics.setColor(Color.white);
-        frameGraphics.fillRect(0,0, com.company.Window.width, com.company.Window.height);
+        if(backgroundImage == null){
+            frameGraphics.setColor(Color.white);
+            frameGraphics.fillRect(0,0, com.company.Window.width, com.company.Window.height);
+            frameGraphics.setColor(Color.black);
+        }
+        frameGraphics.drawImage(backgroundImage, 0,0, com.company.Window.width, com.company.Window.height, null);
         frameGraphics.setColor(Color.black);
     }
 
@@ -72,6 +76,10 @@ public class Animator{
         frameGraphics.drawString("" + score[Ball.pp.RIGHT.ordinal()], cX - rightScoreWidth/2 + 50, 100);
     }
 
+    public void setBackground(BufferedImage image){
+        backgroundImage = image;
+    }
+
     public void addDrawable(Drawable d){
         drawables.add(d);
     }
@@ -80,6 +88,8 @@ public class Animator{
     private final BufferedImage frame;
     private final Graphics2D frameGraphics;
     private final Font countDownFont, gameFont;
+
+    private BufferedImage backgroundImage;
 
     ArrayList<Drawable> drawables;
 }

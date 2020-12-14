@@ -2,6 +2,6 @@ package com.company;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-            new Window().menu.show();
+            new Window().menuManager.displayMainMenu();
     }
 }

@@ -43,7 +43,6 @@ public class Animator{
         //RenderGame
         clear();
         displayScore();
-        displayDelimiter();
         for(Drawable d : drawables){
             d.draw(frameGraphics);
         }
@@ -65,9 +64,9 @@ public class Animator{
         }
     }
 
-    private void displayDelimiter(){
-        frameGraphics.drawLine(cX, 0, cX, 2*cY);
-    }
+//    private void displayDelimiter(){
+//        frameGraphics.drawLine(cX, 0, cX, 2*cY);
+//    }
 
     private void displayScore(){
         int leftScoreWidth = frameGraphics.getFontMetrics().stringWidth("" + score[Ball.pp.LEFT.ordinal()]);

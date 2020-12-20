@@ -57,11 +57,23 @@ public class Engine {
     private void checkRightPanelCollision(){
         int ypos = ball.position.getY();
         int xpos = ball.position.getX() + ball.getRadius()/2;
+        int firstPoint = rightPanel.position.getY() + rightPanel.height/3;
+        int secondPoint = rightPanel.position.getY() + 2 * rightPanel.height/3;
+        double alpha = Math.PI/6;
 
         if( ypos >= rightPanel.position.getY() && ypos <= (rightPanel.position.getY() + rightPanel.height) ){
             if(xpos >= rightPanel.position.getX()){
-                ball.invVel();
+                ball.invXVel();
                 ball.jump(rightPanel.position.getX() - xpos);
+                if(ypos <= firstPoint){
+                    ball.velocity.setY((int)(ball.velocity.getX()*Math.tan(alpha)));
+                    return;
+                }
+                if(ypos >= secondPoint){
+                    ball.velocity.setY(-(int)(ball.velocity.getX()*Math.tan(alpha)));
+                    return;
+                }
+                ball.velocity.setY(0);
                 ball.addVelocity(rightPanel.velocity);
 //                ball.addVelocity(collisionNoise(ball.velocity));
             }
@@ -71,11 +83,23 @@ public class Engine {
     private void checkLeftPanelCollision(){
         int ypos = ball.position.getY();
         int xpos = ball.position.getX() - ball.getRadius()/2;
+        int firstPoint = leftPanel.position.getY() + leftPanel.height/3;
+        int secondPoint = leftPanel.position.getY() + 2 * leftPanel.height/3;
+        double alpha = Math.PI/6;
 
         if( ypos >= leftPanel.position.getY() && ypos <= (leftPanel.position.getY() + leftPanel.height) ){
             if(xpos <= leftPanel.position.getX() + leftPanel.width){
-                ball.invVel();
+                ball.invXVel();
                 ball.jump((leftPanel.position.getX() + leftPanel.width) - xpos);
+                if(ypos <= firstPoint){
+                    ball.velocity.setY(-(int)(ball.velocity.getX()*Math.tan(alpha)));
+                    return;
+                }
+                if(ypos >= secondPoint){
+                    ball.velocity.setY((int)(ball.velocity.getX()*Math.tan(alpha)));
+                    return;
+                }
+                ball.velocity.setY(0);
                 ball.addVelocity(leftPanel.velocity);
 //                ball.addVelocity(collisionNoise(ball.velocity));
             }
